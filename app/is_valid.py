@@ -18,7 +18,3 @@ class IsValidData():
     def is_valid_status(self, status: str) -> bool:
         return status in ('new', 'active', 'completed')
 
-    # def function_all_valid_data_task(self, title, description, status):
-    #     return (self.is_valid_title(title)) and (self.is_valid_description(description)) and (self.is_valid_status(status))
-
-

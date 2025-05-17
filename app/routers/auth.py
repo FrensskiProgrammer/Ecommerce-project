@@ -1,10 +1,8 @@
 from fastapi import APIRouter, Depends, status, HTTPException
-from sqlalchemy import select, insert
+from sqlalchemy import select
 from typing import Annotated
-from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import IntegrityError
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from app.models.user import User
 from app.schemas import CreateUser
@@ -12,6 +10,7 @@ from app.backend.db_depends import get_db
 from datetime import datetime, timedelta, timezone
 import jwt
 from app.is_valid import IsValidData
+from app.service.service_user import UserService
 
 data = IsValidData()
 
@@ -23,43 +22,9 @@ bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 @router.post('/')
-
 async def create_user(db: Annotated[AsyncSession, Depends(get_db)], create_user: CreateUser):
-    try:
-        lists = await db.scalars(select(User))
-        lists = [[row.name.capitalize(), row.email.capitalize()] for row in lists.all()]
-        lists_name_email = [[row[0] for row in lists], [row[1] for row in lists]]
-        if not(data.is_valid_username(create_user.name)) or create_user.name.capitalize() in lists_name_email[0]:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail='Invalid name or already in use'
-            )
-        elif not(data.is_valid_email(create_user.email)) or create_user.email.capitalize() in lists_name_email[1]:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail='Invalid email or already in use'
-            )
-        elif not(data.is_valid_password(create_user.password)):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail='Invalid password'
-            )
-        else:
-            await db.execute(insert(User).values(name=create_user.name.capitalize(),
-                                                 email=create_user.email.capitalize(),
-                                                 hashed_password=bcrypt_context.hash(create_user.password),
-                                                 ))
-            await db.commit()
-            return {
-                'status_code': status.HTTP_201_CREATED,
-                'transaction': 'Successful'
-            }
-
-    except IntegrityError:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Email or name already exists."
-        )
+    value = await UserService.create_new_user(db, create_user)
+    return value
 
 async def authenticate_user(db: Annotated[AsyncSession, Depends(get_db)], username: str, password: str):
     user = await db.scalar(select(User).where(User.name == username))

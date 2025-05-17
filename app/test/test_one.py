@@ -245,7 +245,7 @@ async def test_twelve_delete_tasks(clean_client):
 
 @pytest.mark.asyncio
 async def test_thirteen_get_user(clean_client):
-    response = await clean_client.get('/users/35')
+    response = await clean_client.get('/users/user/35')
 
     assert response.status_code == 404
     assert response.json()['detail'] == 'User not found!'
