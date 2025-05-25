@@ -1,4 +1,4 @@
-from app.pattern_repository.pattern_repository import BaseRepository
+from app.pattern_repository.BaseRepository import BaseRepository
 from app.models.task import Task
 from sqlalchemy import select, insert, update
 from app.backend.db_depends import AsyncSession
@@ -41,3 +41,8 @@ class TaskRepository(BaseRepository):
     @classmethod
     async def del_by_title(cls, db: AsyncSession, title: str):
         return await db.scalar(select(Task).where(Task.title == title))
+
+    @classmethod
+    async def get_users_tasks(cls, db: AsyncSession, username_id: int):
+        values_tasks = await db.scalars(select(Task).where(Task.user_id == username_id))
+        return values_tasks.all()

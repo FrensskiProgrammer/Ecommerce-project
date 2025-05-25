@@ -9,4 +9,4 @@ class User(Base):
     email = Column(String, unique=True)
     hashed_password = Column(String)
 
-    task = relationship('Task', back_populates='user')
+    task = relationship('Task', back_populates='user', cascade='all, delete', uselist=True)

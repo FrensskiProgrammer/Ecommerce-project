@@ -1,4 +1,4 @@
-from app.pattern_task_repository.pattern_task_repository import TaskRepository
+from app.pattern_repository.TaskRepository import TaskRepository
 from app.models.task import Task
 from app.backend.db_depends import AsyncSession
 from fastapi import HTTPException, status
@@ -118,11 +118,6 @@ class TaskService(TaskRepository):
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail='Invalid description'
-                )
-            elif (create_task.user_id in lists_user_id) or (create_task.user_id not in lists_id):
-                raise HTTPException(
-                    status_code=status.HTTP_403_FORBIDDEN,
-                    detail='This ID is already taken by another user or does not exist'
                 )
             else:
                 await TaskRepository.create_task(db, create_task)

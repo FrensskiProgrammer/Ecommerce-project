@@ -5,9 +5,9 @@ from app.schemas import CreateUser
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.routers.auth import get_current_user
 from app.is_valid import IsValidData
-from app.pattern_user_repository.pattern_user_repository import UserRepository
+from app.pattern_repository.UserRepository import UserRepository
+from app.pattern_repository.TaskRepository import TaskRepository
 from app.service.service_user import UserService
-
 
 router = APIRouter(prefix='/users', tags=['user'])
 
@@ -51,3 +51,7 @@ async def delete_user_name(db: Annotated[AsyncSession, Depends(get_db)], name: s
 @router.delete('/email')
 async def delete_user_email(db: Annotated[AsyncSession, Depends(get_db)], email: str, get_user: Annotated[dict, Depends(get_current_user)]):
     return await UserService.del_by_email(db, email, get_user)
+
+@router.get('get_all_tasks_current_user')
+async def get_tasks(db: Annotated[AsyncSession, Depends(get_db)], username_id: dict = Depends(get_current_user)):
+    return await TaskRepository.get_users_tasks(db, username_id['id'])

@@ -1,7 +1,7 @@
 from app.backend.db_depends import AsyncSession
 from fastapi import HTTPException, status, Depends
 from app.models.user import User
-from app.pattern_user_repository.pattern_user_repository import UserRepository
+from app.pattern_repository.UserRepository import UserRepository
 from fastapi.security import OAuth2PasswordBearer
 from app.schemas import CreateUser
 from app.is_valid import IsValidData

@@ -8,6 +8,6 @@ class Task(Base):
     title = Column(String, unique=True)
     description = Column(String)
     status = Column(String)
-    user_id = Column(Integer, ForeignKey('user.id'), unique=True, nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
 
     user = relationship('User', back_populates='task')

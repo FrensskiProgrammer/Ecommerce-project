@@ -5,7 +5,7 @@ from app.schemas import CreateTask
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.routers.auth import get_current_user
 from app.is_valid import IsValidData
-from app.pattern_task_repository.pattern_task_repository import TaskRepository
+from app.pattern_repository.TaskRepository import TaskRepository
 from app.service.service_task import TaskService
 
 router = APIRouter(prefix='/tasks', tags=['task'])

@@ -11,11 +11,12 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from app.is_valid import IsValidData
 from app.service.service_user import UserService
+from app.settings.config import settings
 
 data = IsValidData()
 
-SECRET_KEY = 'c86972cf29846cd228d02f3564e9d2802c101a807003dda96a970a8e5b7b562f'
-ALGORITHM = 'HS256'
+SECRET_KEY = settings.secret_key
+ALGORITHM = settings.algorithm
 
 router = APIRouter(prefix='/auth', tags=['auth'])
 bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')

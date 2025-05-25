@@ -1,4 +1,4 @@
-from app.pattern_repository.pattern_repository import BaseRepository
+from app.pattern_repository.BaseRepository import BaseRepository
 from app.models.user import User
 from app.models.task import Task
 from sqlalchemy import select, insert, update
@@ -87,4 +87,3 @@ class UserRepository(BaseRepository):
     async def delete_user_email(cls, db: AsyncSession, email: str):
         value = await db.scalar(select(cls.model).where(cls.model.email == email.capitalize()))
         return value
-
