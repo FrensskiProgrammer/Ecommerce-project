@@ -1,18 +1,18 @@
-from os import getenv
+import os
+
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+
 
 class Settings:
+    """Класс для безопасного хранения данных"""
 
-    def __init__(self):
-        self.database_host = getenv('DATABASE_HOST')
-        self.database_port = getenv('DATABASE_PORT')
-        self.database_user = getenv('DATABASE_USER')
-        self.database_password = getenv('DATABASE_PASSWORD')
-        self.database_name = getenv('DATABASE_NAME')
+    database_host = os.getenv("DATABASE_HOST")
+    database_port = int(os.getenv("DATABASE_PORT"))
+    database_user = os.getenv("DATABASE_USER")
+    database_password = os.getenv("DATABASE_PASSWORD")
+    database_name = os.getenv("DATABASE_NAME")
 
-        self.secret_key = getenv('SECRET_KEY')
-        self.algorithm = getenv('ALGORITHM')
-
-settings = Settings()
+    secret_key = os.getenv("SECRET_KEY")
+    algorithm = os.getenv("ALGORITHM")
